@@ -1,0 +1,4 @@
+vacations
+=========
+
+Simple vacations manager
