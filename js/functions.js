@@ -37,22 +37,28 @@ function doprint(obj){
 }
 
 
-var gobutton = function(obj, func, text){
+var gobutton = function(obj, functions ){
 	$(obj)
 	.hide()
 	.parent()
-	.find('.sure')
-	.stop(true, false).animate({width:'toggle'}, 100, function(){
-		$(this).text(text ? text : 'delete')
-	})
-	.on('click', function(){
-		 new Function(func)()
-	}).mouseleave(function(){
-		$(this).text('').stop(true, false).animate({width:'toggle'}, 100, function(){
+	.find('.sure').stop(true, false).animate({width:'toggle'}, 300)
+	.mouseleave(function(){
+		$(this).text('').stop(true, false).animate({width:'toggle'}, 300, function(){
 			$(this).hide()
 			$(obj).show()
 		})
 	})
+	
+	if(functions.length > 0){
+		for(v in functions) {
+			var f = functions[v]
+			if (f.text && f.class && f.func){
+				if(!$(obj).parent().find('.sure').find('.'+f.class).length){
+					$('<span class="'+f.class+'">'+f.text+'</span>').appendTo($(obj).parent().find('.sure')).on('click', new Function(f.func))
+				}
+			}
+		}
+	}
 }
 
 
@@ -288,13 +294,8 @@ var updateJs = function(){
 		}
 	})
 	
-	$('.bheader').fixClick(function(){
+	$('.bheader').on('click', function(){
 		csend({action:'nav', id:$(this).attr('data-id'), pid:$(this).attr('data-pid') })
-	},function(){
-		if($(this).attr('data-pid')){
-			$(this).parent().find('b, span').hide()
-			$(this).parent().find('input').parent().show().find('input').focus().select()
-		}
 	})
 	
 	drawCalendar(gdata.index, gdata.year)

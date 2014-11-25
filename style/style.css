@@ -166,6 +166,13 @@ div.header div { padding:1em;}
 	text-align:center;
 	cursor: pointer;
 }
+.sure span {
+	display:table-cell;
+	padding:0 .5em;
+}
+.sure span:nth-child(odd) {
+	color:#06C;
+}
 
 .move {
 	background: url(../img/move.gif) no-repeat center;
