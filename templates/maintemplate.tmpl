@@ -37,7 +37,7 @@
 					<b class='bheader roundcell' id='header{{=otdel.id}}' style='cursor:pointer;' data-id="{{=otdel.id}}"{{?it.admin}} data-pid="{{=otdel.pid}}"{{?}} title='двойной клик позволяет редактировать название отдела'>{{?otdel.graph==1}}<img src="img/graph_icon.gif" />{{?}}&nbsp;{{=otdel.name}}</b>
 					<div class='roundcell' style='display:none;'><input type='text' style='width:100%;' size="{{=otdel.name.length*2}}" id='editname{{=otdel.id}}' class='editheader trans' data-pid='{{=otdel.pid}}' data-id='{{=otdel.id}}' name='editname' value='{{=otdel.name}}'/></div>
 					{{?it.admin}}
-					<div class='close roundcell' onclick="gobutton(this, [ {text:'изменить', func:'$(this).parent().parent().find(\'b, span\').hide();$(this).parent().parent().find(\'input\').parent().show().find(\'input\').focus().select()', class:'edit_item'}, {text:'удалить', func:'csend({action:\'delete_otdel\',otdel_id:{{=otdel.id}},pid:{{=otdel.pid}} })', class:'delete_item'} ])"></div>
+					<div class='roundcell' style='width:20px;'><span class='ui-icon ui-icon-gear close' onclick="gobutton(this, [ {text:'переименовать', func:'$(this).parent().parent().find(\'b, span\').hide();$(this).parent().parent().find(\'input\').parent().show().find(\'input\').focus().select()', class:'edit_item'}, {text:'удалить', func:'csend({action:\'delete_otdel\',otdel_id:{{=otdel.id}},pid:{{=otdel.pid}} })', class:'delete_item'} ])"></span></div>
 					{{?}}
 				</div>
 		{{~}}
@@ -96,11 +96,11 @@
 
 
 	<h3 align="center">Список пользователей</h3>
-	<table width='100%' style='text-align:center; border:1px solid #bbb;' class='zebra' align='center'>
+	<table width='100%' style='text-align:center; border:1px solid #bbb;' class='zebra border1px' align='center'>
 		<tr>
-			<td class='thround header' width='20%' style='cursor:pointer'>Имя</td>
-			<td class='thround header' width='80%'>Модератор отдела</td>
-			<td colspan='2' class='thround header' style='cursor:pointer'>Доступ</td>
+			<th width='20%'>Имя</th>
+			<th width='80%'>Модератор отдела</th>
+			<th colspan='2'>Доступ</th>
 		</tr>
 		{{~it.members :member}}
 		<tr>

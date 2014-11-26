@@ -12,11 +12,11 @@ b, strong { color:#3F4A57; }
 table { border-collapse:collapse; }
 table.txtcontent { border-collapse:collapse; border-spacing:0; }
 table.txtcontent td, table.txtcontent th { padding:5px; }
-table.txtcontent th { color:#3E4853; font-weight:bold; }
 table.txtcontent th span { font-weight:normal; }
 table.border1px { border:1px solid #888888; }
 table.border1px td, table.border1px th { border:1px solid #888888; }
 table.nobordered tr, table.nobordered td, table.nobordered th { border:none; }
+table.border1px th { padding:5px; color: #ffffff; background: #6181a6; }
 a { color: #2B587A; text-decoration: none; cursor: pointer; text-decoration:none; border-bottom:1px dotted; }
 .button_blue {
 	display: inline-block;
@@ -127,7 +127,7 @@ tr.small td {
 	background-color: #f0f0f0;
 	cursor:default;
 }
-div.round { display:table; width:100%; background-color:#eee; border-radius:6px; margin:1px; }
+div.round { display:table; width:100%; background-color:#eee; margin:1px; }
 div.round b:hover, div.round:hover { color:#bb0000; }
 div.round b:active, div.round:active { color:#ff0000; }
 div.round:active { box-shadow:inset 0px 0px 3px 1px rgba(0,0,255,0.2); z-index:1000; }
@@ -150,17 +150,16 @@ div.header { border:none; padding:0;}
 div.header div { padding:1em;}
 .header a { color:#ffffff; }
 .close {
-	background: url(../img/close.gif) no-repeat center;
+	//background: url(../img/close.gif) no-repeat center;
 	opacity: 0.05;
 	filter: alpha(opacity=10);
-	width: 11px;
-	height: 11px;
+	//width: 11px;
+	//height: 11px;
 	display:table-cell;
 	cursor:pointer;
 }
 .close:hover { opacity: 1; filter: alpha(opacity=100); }
 .sure {
-	border-radius:6px;
 	background-color:#dedeff;
 	width:30px;
 	text-align:center;

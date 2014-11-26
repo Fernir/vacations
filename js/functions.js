@@ -1,5 +1,3 @@
-if(jQuery){(function(e){e.fn.fixClick=function(t,n){var r=this;r.click=t;r.dblclick=n;r.timer=null;e(this).unbind("click.fixclick").unbind("dblclick.fixclick").on("click.fixclick",function(n){var i=this;i.e=n;if(!r.timer){r.timer=setTimeout(function(){t.call(i,i.e);r.timer=null},e.fn.fixClick.clickDelay)}}).on("dblclick.fixclick",function(e){var t=this;clearTimeout(r.timer);r.timer=null;n.call(t,e)});return this};e.fn.fixClick.clickDelay=300})(jQuery)}
-
 var gdata;
 var months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь']
 
@@ -38,27 +36,27 @@ function doprint(obj){
 
 
 var gobutton = function(obj, functions ){
-	$(obj)
-	.hide()
-	.parent()
-	.find('.sure').stop(true, false).animate({width:'toggle'}, 300)
-	.mouseleave(function(){
-		$(this).text('').stop(true, false).animate({width:'toggle'}, 300, function(){
-			$(this).hide()
-			$(obj).show()
-		})
-	})
-	
 	if(functions.length > 0){
 		for(v in functions) {
 			var f = functions[v]
 			if (f.text && f.class && f.func){
-				if(!$(obj).parent().find('.sure').find('.'+f.class).length){
-					$('<span class="'+f.class+'">'+f.text+'</span>').appendTo($(obj).parent().find('.sure')).on('click', new Function(f.func))
+				if(!$(obj).parent().parent().find('.sure').find('.'+f.class).length){
+					$('<span class="'+f.class+'" style="overflow:hidden;">'+f.text+'</span>').appendTo($(obj).parent().parent().find('.sure')).on('click', new Function(f.func))
 				}
 			}
 		}
 	}
+	
+	
+	$(obj).parent().find('.close').hide()
+	var sure = $(obj).parent().parent().find('.sure')
+	
+	$(sure).show('fast')
+	$(sure).mouseleave(function(){
+		$(this).hide('fast', function(){
+			$(obj).parent().find('.close').show()
+		})
+	})
 }
 
 
@@ -301,7 +299,7 @@ var updateJs = function(){
 	drawCalendar(gdata.index, gdata.year)
 	drawCalendarNoData(gdata.year)
 	
-	$('.close').parent().append('<div class="sure roundcell" />')
+	$('.close').parent().parent().append('<div class="sure roundcell" />')
 	$('.sure').hide()
 	
 	$('body').tooltip({ show:0, hide:0, track: true })
@@ -309,5 +307,5 @@ var updateJs = function(){
 }
 
 $(function(){
-	if(gdata=='undefined' || gdata==null) csend({ })
+	if(gdata=='undefined' || gdata==null) csend({ action : 'nav' })
 })
