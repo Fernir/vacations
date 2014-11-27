@@ -37,7 +37,7 @@ function doprint(obj){
 
 var gobutton = function(obj, functions ){
 	if(functions.length > 0){
-		for(v in functions) {
+		for(var v in functions) {
 			var f = functions[v]
 			if (f.text && f.class && f.func){
 				if(!$(obj).parent().parent().find('.sure').find('.'+f.class).length){
@@ -103,6 +103,8 @@ var csend = function(arg, callback){
 }
 
 var drawCalendar = function(index, year){
+	$('.tograph').empty()
+
 	var table = $('<table id="theT" align="center" width="100%">')
 	var tr = $('<tr>').appendTo(table)
 	var td = $('<td class="header">Сотрудник</td>').appendTo(tr)
@@ -165,7 +167,7 @@ var drawCalendar = function(index, year){
 					var dtid = user + "_" + (month==13 ? syear + 1 : syear) + "_" + (month==13 ? 1 : month) + "_" + colweeks
 					var data = gdata['rows'][user][dtid] ? gdata['rows'][user][dtid] : null
 					var datetooltip = ((first > day_counter)? months[month-2] : ((first == 0) ? months[11]:months[month-1])) + " " + ((first == 0) ? 32-(7-day_counter):first) + " - " + months[(month-1)] + " " + day_counter
-					var td = $('<td class="sc' + ((data!=null)? ' active':'') + '" tt></td>').appendTo(tr)
+					var td = $('<td class="sc' + ((data!=null)? ' active':'') + '" t></td>').appendTo(tr)
 					td.get(0).user = user
 					td.get(0).sid = dtid
 					td.get(0).data = data
@@ -201,13 +203,12 @@ var drawCalendar = function(index, year){
 	}
 	
 	table.tooltip({
-		items: '[tt]', show : 0, hide : 0, track: true,
+		items: "[t]", show : 0, hide : 0,
 		content: function() {
-			return '<div style="white-space:nowrap;">' + $(this).get(0).datetooltip + ($(this).get(0).data ? '<div style="font:12px monospace; background:#777; color:#fff; padding:.5em; border:1px solid #aaa; margin-top:.5em;  white-space:pre;">' + $(this).get(0).data + '</div>':'') + '</div>'
+			return '<div style="white-space:nowrap;">' + (this.datetooltip ? this.datetooltip : '') + (this.data ? '<div class="frm">' + this.data + '</div>':'') + '</div>'
 		}
 	})
 	
-	$('.tograph').empty()
 	table.appendTo($('.tograph'))
 }
 
