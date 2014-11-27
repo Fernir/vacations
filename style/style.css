@@ -229,3 +229,15 @@ div.frm {
 	margin-top:.5em;  
 	white-space:pre;
 }
+
+.opacity05 {
+	opacity: .5;
+	filter: alpha(opacity=50);
+}
+
+.loading {
+	position:absolute;
+	top:0; left:0; bottom:0; right:0;
+	background:url(../img/loading.gif) no-repeat center center;
+	display:none;
+}

@@ -8,14 +8,14 @@
 <tr>
 <td>
 {{?it.view=='nav'}}
-	<a style="cursor:pointer; display:table-cell; text-align:right; text-decoration:none; border-bottom:1px dotted;" onclick="$('.tocal').dialog({width:700, resizable:false, modal:true, title:' алендарь'})">календарь</a>
+	<a style="cursor:pointer; display:table-cell; text-align:right; text-decoration:none; border-bottom:1px dotted;" onclick="$('.tocal').dialog({width:700, resizable:false, modal:true, title:{{=it.year}} })">календарь</a>
 	
 	<table width='100%' align='center'>
 		<tr>
 			<td align='left'>
 			{{?it.id!=1}}
 				{{~it.breadcrumbs.reverse() :value}}
-					<a onclick="csend({action:'nav', id:{{=value.id}} })">{{=value.text}}</a>&nbsp;/&nbsp;
+					<a onclick="csend({action:'nav', id:{{=value.id}} })">{{=value.text}}</a>&nbsp;&raquo;&nbsp;
 				{{~}}
 			{{?}}
 			</td>
@@ -34,10 +34,10 @@
 	<div>
 		{{~it.otdels :otdel}}
 				<div class="round{{?otdel.childs != 0}} roundo{{?}}">
-					<b class='bheader roundcell' id='header{{=otdel.id}}' style='cursor:pointer;' data-id="{{=otdel.id}}"{{?it.admin}} data-pid="{{=otdel.pid}}"{{?}} title='двойной клик позвол€ет редактировать название отдела'>{{?otdel.graph==1}}<img src="img/graph_icon.gif" />{{?}}&nbsp;{{=otdel.name}}</b>
+					<b class='bheader roundcell' id='header{{=otdel.id}}' style='cursor:pointer;' data-id="{{=otdel.id}}"{{?it.admin}} data-pid="{{=otdel.pid}}"{{?}}>{{?otdel.graph==1}}<img src="img/graph_icon.gif" />{{?}}&nbsp;{{=otdel.name}}</b>
 					<div class='roundcell' style='display:none;'><input type='text' style='width:100%;' size="{{=otdel.name.length*2}}" id='editname{{=otdel.id}}' class='editheader trans' data-pid='{{=otdel.pid}}' data-id='{{=otdel.id}}' name='editname' value='{{=otdel.name}}'/></div>
 					{{?it.admin}}
-					<div class='roundcell' style='width:20px;'><span class='ui-icon ui-icon-gear close' onclick="gobutton(this, [ {text:'переименовать', func:'$(this).parent().parent().find(\'b, span\').hide();$(this).parent().parent().find(\'input\').parent().show().find(\'input\').focus().select()', class:'edit_item'}, {text:'удалить', func:'csend({action:\'delete_otdel\',otdel_id:{{=otdel.id}},pid:{{=otdel.pid}} })', class:'delete_item'} ])"></span></div>
+					<div class='roundcell' style='width:20px;'><span class='ui-icon ui-icon-gear opacity05 close' onclick="gobutton(this, [ {text:'переименовать', func:'$(this).parent().parent().find(\'b, span\').hide();$(this).parent().parent().find(\'input\').parent().show().find(\'input\').focus().select()', class:'edit_item'}, {text:'удалить', func:'csend({action:\'delete_otdel\',otdel_id:{{=otdel.id}},pid:{{=otdel.pid}} })', class:'delete_item'} ])"></span></div>
 					{{?}}
 				</div>
 		{{~}}

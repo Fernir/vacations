@@ -77,6 +77,7 @@ var goprompt = function(title, text, args){
 }
 
 var csend = function(arg, callback){
+	$('.button_blue, a, .bheader').css({ cursor:'wait'})
 	$('input, select').prop('disabled', function(){ return !$(this).prop('disabled') })
 	$.ajax({
 		dataType: 'json',
@@ -85,6 +86,7 @@ var csend = function(arg, callback){
 		data: arg,
 		cache: false,
 		success: function(response){
+			$('.button_blue, a, .bheader').css({ cursor:'pointer'})
 			gdata = response
   			$('#container').tmpl('maintemplate', gdata, function(){
 				updateJs()
@@ -94,6 +96,7 @@ var csend = function(arg, callback){
 			$('input, select').prop('disabled', function(){ return !$(this).prop('disabled') })
 		},
 		error : function(xdr, exception){
+			$('.button_blue, a, .bheader').css({ cursor:'pointer'})
 			alert(exception)
 			if(callback && typeof(callback) == 'function')
 				callback(arguments)
