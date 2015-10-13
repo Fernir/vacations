@@ -1,92 +1,102 @@
-<div class="header" style='display:table; width:100%;'>
-	<div style="font-weight:bold; font-size:17px; cursor:pointer; display:table-cell; text-align:left;" onclick="csend({action:'nav', id:1})">Графики отпусков</div>
-	<div style="display:table-cell; text-align:right;">[{{=it.user}}]&nbsp;{{?it.admin}}&nbsp;<a onclick="csend({action:'{{?it.view=='nav'}}members{{??}}nav{{?}}' })">{{?it.view=='nav'}}пользователи{{??}}подразделения{{?}}</a>{{?}}</div>
+<div class="col-md-12 navbar navbar-default">
+	<div class="navbar-text pull-right">[{{=it.user}}]&nbsp;{{?it.admin}}&nbsp;<a onclick="csend({action:'{{?it.view=='nav'}}members{{??}}nav{{?}}' })">{{?it.view=='nav'}}РїРѕР»СЊР·РѕРІР°С‚РµР»Рё{{??}}РїРѕРґСЂР°Р·РґРµР»РµРЅРёСЏ{{?}}</a>{{?}}</div>
+	<h3 class="navbar-text" style="cursor: pointer;" onclick="csend({action:'nav', id:1})">Р“СЂР°С„РёРєРё РѕС‚РїСѓСЃРєРѕРІ</h3>
 </div>
-<br />
-<br />
-<table width="90%" align="center">
-<tr>
-<td>
+
+<div class="col-md-12">
+
+
 {{?it.view=='nav'}}
-	<a style="cursor:pointer; display:table-cell; text-align:right; text-decoration:none; border-bottom:1px dotted;" onclick="$('.tocal').dialog({width:700, resizable:false, modal:true, title:{{=it.year}} })">календарь</a>
-	
-	<table width='100%' align='center'>
-		<tr>
-			<td align='left'>
-			{{?it.id!=1}}
-				{{~it.breadcrumbs.reverse() :value}}
-					<a onclick="csend({action:'nav', id:{{=value.id}} })">{{=value.text}}</a>&nbsp;&raquo;&nbsp;
-				{{~}}
-			{{?}}
-			</td>
-			<td align='right'>
+	<div class="clearfix">
+		<div class="pull-right">
 			{{?it.admin}}
 				{{?it.id!=1}}
 					<div style='padding-bottom:.4em; display:inline-block;'><div class='checkbox{{?it.graph==1}} on{{?}}' onclick="csend({action:'toggle', id:{{=it.id}}, checkvalue:{{=it.graph}} })"><div>&nbsp;</div><img src='img/graph_icon.gif' />&nbsp;</div></div>
 				{{?}}
-				<button class='button_blue' onclick="csend({otdel_id:{{=it.id}}, action:'new_otdel'})">Добавить отдел</button>
+				<button class='btn btn-primary' onclick="csend({otdel_id:{{=it.id}}, action:'new_otdel'})">Р”РѕР±Р°РІРёС‚СЊ РѕС‚РґРµР»</button>
 			{{?}}
-			</td>
-		</tr>
-	</table>
-	<br />
-	
-	<div>
+		</div>
+		<div><a class="btn btn-primary" onclick="$('.tocal').dialog({width:700, resizable:false, modal:true, title:{{=it.year}} })">РєР°Р»РµРЅРґР°СЂСЊ</a></div>
+		<br />
+	</div>
+
+	{{?it.id!=1}}
+	<ol class="breadcrumb">
+		{{~it.breadcrumbs.reverse() :value}}
+			<li><a onclick="csend({action:'nav', id:{{=value.id}} })">{{=value.text}}</a></li>
+		{{~}}
+	</ol>
+	{{?}}
+
+	<div class="list-group">
 		{{~it.otdels :otdel}}
-				<div class="round{{?otdel.childs != 0}} roundo{{?}}">
-					<b class='bheader roundcell' id='header{{=otdel.id}}' style='cursor:pointer;' data-id="{{=otdel.id}}"{{?it.admin}} data-pid="{{=otdel.pid}}"{{?}}>{{?otdel.graph==1}}<img src="img/graph_icon.gif" />{{?}}&nbsp;{{=otdel.name}}</b>
-					<div class='roundcell' style='display:none;'><input type='text' style='width:100%;' size="{{=otdel.name.length*2}}" id='editname{{=otdel.id}}' class='editheader trans' data-pid='{{=otdel.pid}}' data-id='{{=otdel.id}}' name='editname' value='{{=otdel.name}}'/></div>
-					{{?it.admin}}
-					<div class='roundcell' style='width:20px;'><span class='ui-icon ui-icon-gear opacity05 close' onclick="gobutton(this, [ {text:'переименовать', func:'$(this).parent().parent().find(\'b, span\').hide();$(this).parent().parent().find(\'input\').parent().show().find(\'input\').focus().select()', class:'edit_item'}, {text:'удалить', func:'csend({action:\'delete_otdel\',otdel_id:{{=otdel.id}},pid:{{=otdel.pid}} })', class:'delete_item'} ])"></span></div>
-					{{?}}
-				</div>
+		<div class="list-group-item {{?otdel.childs != 0}} list-group-item-info{{?}}">
+			{{?it.admin}}
+			<span class='close' style='cursor:pointer;' onclick="gobutton(this, [ {text:'РїРµСЂРµРёРјРµРЅРѕРІР°С‚СЊ', func:'$(this).parent().find(\'b, span\').hide();$(this).parent().parent().find(\'input\').parent().show().find(\'input\').focus().select()', class:'edit_item'}, {text:'СѓРґР°Р»РёС‚СЊ', func:'csend({action:\'delete_otdel\',otdel_id:{{=otdel.id}},pid:{{=otdel.pid}} })', class:'delete_item'} ])">&times;</span>
+			{{?}}
+			<h5 class='bheader list-group-item-heading link' style="cursor: pointer" id='header{{=otdel.id}}' data-id="{{=otdel.id}}"{{?it.admin}} data-pid="{{=otdel.pid}}"{{?}}>{{?otdel.graph==1}}<img src="img/graph_icon.gif" />{{?}}&nbsp;{{=otdel.name}}</h5>
+			<h5 class="editheader hidden"><input type='text' style='width:100%;' size="{{=otdel.name.length*2}}" id='editname{{=otdel.id}}' class='editheader form-control' data-pid='{{=otdel.pid}}' data-id='{{=otdel.id}}' name='editname' value='{{=otdel.name}}'/></h5>
+		</div>
 		{{~}}
 	</div>
-	<br>
 
 	{{?it.graph==1}}
 		{{?it.index && it.index != 1}}
-			<table width='100%'>
-				<tr>
-					<td width='33%'><button class='button_blue' onclick='doprint($("#theT"))'><img src='img/print.gif' />&nbsp;Печать</button></td><td style="text-align:center; font-size:180%;">{{=it.year}}</td><td align='right' width='33%'>
-			<button class='button_blue' onclick='csend({year:-1,index:{{=it.index}} })'>&larr;</button><button class='button_blue'  onclick='csend({year:{{=(new Date().getFullYear() - it.year)}},index:{{=it.index}} })'>текущий год</button></b><button class='button_blue' onclick='csend({year:1,index:{{=it.index}} })'>&rarr;</button>
-					</td>
-				</tr>
-			</table>
+		<div class="clearfix">
+			<div class="form-group pull-right">
+				<button class='btn btn-primary' onclick='doprint($("#theT"))'><img src='img/print.gif' />&nbsp;РџРµС‡Р°С‚СЊ</button>&nbsp;
+				<div class="btn-group">
+					<button class='btn btn-primary' onclick='csend({year:-1,index:{{=it.index}} })'>&larr;</button>
+					<button class='btn btn-primary' onclick='csend({year:{{=(new Date().getFullYear() - it.year)}},index:{{=it.index}} })'>С‚РµРєСѓС‰РёР№ РіРѕРґ</button>
+					<button class='btn btn-primary' onclick='csend({year:1,index:{{=it.index}} })'>&rarr;</button>
+				</div>
+			</div>
+			<h2>{{=it.year}}</h2>
 			<br />
-			<div class='tograph' />
-			<br />
+		</div>
+		<div class='tograph' />
+		<br />
 			
-			{{?it.admin}}
-			<table width="100%">
-			  <tr>
-				<td colspan="5">
-				<legend><b>Редакторы:</b></legend>
-				<br>
-				{{ for (key in it.graph_editors){ }}
-					{{?it.admin}}
-						<div class='editor'><div>{{=it.graph_editors[key]}}&nbsp;</div><div class='close' onclick='csend({deletemember:1, member:{{=key}}, otdel:{{=it.index}}, index:{{=it.index}} })' /></div>
-					{{??}}
-						{{=value}}
-					{{?}}
-				{{ } }}
-				</td>
-			  </tr>
-			  <tr>
-				<td>
-					<select id='selectmember' style='width:170px;'>
-						<option value='0'>&nbsp;</option>
-						{{ for (id in it.editors){ }}
-							<option value='{{=id}}'>{{=it.editors[id]}}</option>
-						{{ } }}
-					</select>	
-				</td>
-				<td><button class='button_blue' onclick="csend({setmember:1, member:$('#selectmember option:selected').val(), unit: $('#selectmember option:selected').text(), otdel:{{=it.index}} })">Добавить</button></td>
-				<td width="100%">&nbsp;</td>
-				<td><div class='input'><input id='unitname' type='text' /></div></td>
-				<td><button class='button_blue' onclick="csend({add:1, unit:$('#unitname').val(), index:{{=it.id}} }); $('#unitname').val('');">Добавить</button></td>
-			  </tr>
-			</table>
+		{{?it.admin}}
+			<div class="col-md-12">
+				<div class="pull-right">
+					<div class="navbar-form">
+						<div class="form-group">
+							<input id='unitname' type='text' class='form-control' />
+						</div>
+						<button class='btn btn-primary' onclick="csend({add:1, unit:$('#unitname').val(), index:{{=it.id}} }); $('#unitname').val('');">Р”РѕР±Р°РІРёС‚СЊ</button>
+					</div>
+				</div>
+			  	<div class="col-md-3">
+			  		<div class="well">
+			  			<h4>Р РµРґР°РєС‚РѕСЂС‹:</h4>
+						<div class="form-group">
+							{{ for (key in it.graph_editors){ }}
+								{{?it.admin}}
+									<div class='badge'>
+										<span class='close' onclick='csend({deletemember:1, member:{{=key}}, otdel:{{=it.index}}, index:{{=it.index}} })'>&times;</span>
+										<div style="font-size: 17px; padding-right:1em;">{{=it.graph_editors[key]}}</div>
+									</div>
+								{{??}}
+									{{=value}}
+								{{?}}
+							{{ } }}
+						</div>
+				  		<div>
+				  			<div class="col-md-9">
+				  				<select id='selectmember' class="form-control col-md-9">
+										<option value='0'>&nbsp;</option>
+										{{ for (id in it.editors){ }}
+											<option value='{{=id}}'>{{=it.editors[id]}}</option>
+										{{ } }}
+								</select>
+				  			</div>
+							<button class='btn btn-primary col-md-3' onclick="csend({setmember:1, member:$('#selectmember option:selected').val(), unit: $('#selectmember option:selected').text(), otdel:{{=it.index}} })">Р”РѕР±Р°РІРёС‚СЊ</button>
+				  		</div>
+				  		<div class="clearfix"></div>
+					</div>
+				</div>
+			</div>
 		{{?}}
 		{{?}}
 	{{?}}
@@ -95,19 +105,19 @@
 {{??it.view=='members'}}
 
 
-	<h3 align="center">Список пользователей</h3>
+	<h3 align="center">РЎРїРёСЃРѕРє РїРѕР»СЊР·РѕРІР°С‚РµР»РµР№</h3>
 	<table width='100%' style='text-align:center; border:1px solid #bbb;' class='zebra border1px' align='center'>
 		<tr>
-			<th width='20%'>Имя</th>
-			<th width='80%'>Модератор отдела</th>
-			<th colspan='2'>Доступ</th>
+			<th width='20%'>РРјСЏ</th>
+			<th width='80%'>РњРѕРґРµСЂР°С‚РѕСЂ РѕС‚РґРµР»Р°</th>
+			<th colspan='2'>Р”РѕСЃС‚СѓРї</th>
 		</tr>
 		{{~it.members :member}}
 		<tr>
 			<td>{{=member.name}}</td>
 			<td>
 			{{?member.access==1}}
-				Все
+				Р’СЃРµ
 			{{??}}
 				{{=member.otdels_edit.join(', ')}}
 			{{?}}
@@ -115,13 +125,13 @@
 			<td>
 				<select onchange="csend({ action:'access_member', member_id:{{=member.id}}, accessval:$(this).val()});">
 					<option value='0'></option>
-					<option value='2'{{?member.access==2}} selected{{?}}>Редактор</option>
-					<option value='1'{{?member.access==1}} selected{{?}}>Администратор</option>
+					<option value='2'{{?member.access==2}} selected{{?}}>Р РµРґР°РєС‚РѕСЂ</option>
+					<option value='1'{{?member.access==1}} selected{{?}}>РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ</option>
 				</select>
 			</td>
 			<td style='border:0px; padding:4px 6px;'>
 			{{?it.admin}}
-			<img style='cursor:pointer' src='img/remove.png' onclick="goprompt('Внимание!', 'Вы действительно хотите удалить <b>{{=member.name}}</b>?', { action:'delete_member', member_id:{{=member.id}} })" />
+			<img style='cursor:pointer' src='img/remove.png' onclick="goprompt('Р’РЅРёРјР°РЅРёРµ!', 'Р’С‹ РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ <b>{{=member.name}}</b>?', { action:'delete_member', member_id:{{=member.id}} })" />
 			{{?}}
 			</td>
 		</tr>
@@ -130,14 +140,14 @@
 	{{?it.admin}}
 		<div align='right'>
 		<br />
-		<div class='input'><input id='nametext' type='text' style='margin:3px;' /></div><button class='button_blue' onclick="csend({action:'add_member', name:$('#nametext').val() })">Добавить</button></div>
+		<div class='input'><input id='nametext' type='text' style='margin:3px;' /></div><button class='btn btn-primary' onclick="csend({action:'add_member', name:$('#nametext').val() })">Р”РѕР±Р°РІРёС‚СЊ</button></div>
 	{{?}}
 {{?}}
 
 
 <div id="moveform" style="display:none;">
 	<div style="margin:1em; display:table; width:90%;">
-		<div style="display:table-cell;">В&nbsp;отдел:&nbsp;</div>
+		<div style="display:table-cell;">Р’&nbsp;РѕС‚РґРµР»:&nbsp;</div>
 		<select id="moveformselect" style=" display:table-cell;">
 			<option value="0">&nbsp;</option>
 			{{ for (id in it.move_to){ }}
@@ -148,6 +158,4 @@
 </div>
 
 
-</td>
-</tr>
-</table>
+</div>
