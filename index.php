@@ -1,15 +1,16 @@
-<?php header("Content-type: text/html; charset=UTF-8"); ?>
+<? 
+header("Content-type: text/html; charset=UTF-8"); 
+require_once("config.php"); 
+?>
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<meta name="description" content="">
-<meta name="author" content="">
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, minimum-scale=0.5, maximum-scale=0.5" />
 
 <!-- Custom Fonts -->
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700&amp;subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,700&amp;subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
 <!-- Custom Styles -->
 <link rel="stylesheet" href="style/style.css" type="text/css" />
 

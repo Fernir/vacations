@@ -1,14 +1,29 @@
 var months = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 var global = { json : {} };
 
-if (Object.prototype.watch == null) {
-    Object.defineProperty(Object.prototype, "watch", { enumerable: false, configurable: true, writable: false, value: function (prop, handler) {
-            var oldval = this[prop], newval = oldval, getter = function(){ return newval; }, setter = function(val){
+if (!Object.prototype.watch) {
+    Object.defineProperty(Object.prototype, "watch", {
+          enumerable: false, 
+          configurable: true,
+          writable: false,
+          value: function (prop, handler) {
+            var oldval = this[prop],
+            newval = oldval,
+            getter = function () {
+                return newval;
+            },
+            setter = function (val) {
                 oldval = newval;
                 return newval = handler.call(this, prop, oldval, val);
             };
-            if (delete this[prop]) {
-                Object.defineProperty(this, prop, { get: getter, set: setter, enumerable: true, configurable: true });
+            
+            if (delete this[prop]) { 
+                Object.defineProperty(this, prop, {
+                      get: getter
+                    , set: setter
+                    , enumerable: true
+                    , configurable: true
+                });
             }
         }
     });
@@ -32,7 +47,7 @@ var csend = function(arg){
 
     var xmlhttp = new XMLHttpRequest() || new ActiveXObject('Msxml2.XMLHTTP') || new ActiveXObject('Microsoft.XMLHTTP') || null;
     if(xmlhttp){
-        xmlhttp.open( "GET", 'data.php?' + this.serialiseObject(arg), true );
+        xmlhttp.open( "GET", location.href.replace(location.search, '') + 'data.php' + location.search + '&' + this.serialiseObject(arg) , true );
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4) {
                 if ((xmlhttp.status >= 200 && xmlhttp.status < 300) || xmlhttp.status == 304) {
@@ -50,12 +65,12 @@ var DrawNavbar = React.createClass({
         return (
             <div>
                 <div className="navbar navbar-default">
-                    <div className="navbar-text pull-right">[{this.props.json.user}]
+                    <div className="navbar-text pull-right">[<a className="button_sand" onClick={function(){ csend({view : 'week', acion: 'logout'})}} href="logout/">{this.props.json.user} - выход</a>]
                     {(this.props.json.admin) && (
                         <a style={{marginLeft:'10px'}} onClick={ function(){ csend({action: this.props.json.view=='nav' ? 'members':'nav' }) }.bind(this) }>{this.props.json.view=='nav' ? 'пользователи':'подразделения'}</a>
                     )}
                     </div>
-                    <h3 className="navbar-text" style={{cursor: 'pointer'}} onClick={ function(){ csend({action:'nav', id: 1 }) }}>Графики отпусков</h3>
+                    <h3 className="navbar-text" style={{cursor: 'pointer'}} onClick={ function(){ csend({action:'nav', id:1}) }}>Графики отпусков</h3>
                 </div>
                 <div className="col-md-12 clearfix">
                     {this.props.children}
@@ -70,7 +85,7 @@ var DrawNavbar = React.createClass({
 var DrawCalendar = React.createClass({
     componentWillReceiveProps: function(nextProps){
         this.setState({ 
-            showEdit: false,
+            showEdit: nextProps.showEdit,
             closed: true,
             confirm: false,
         });
@@ -102,7 +117,7 @@ var DrawCalendar = React.createClass({
 
         cols.push(<td className="header"><b>Сотрудник</b></td>);
         var syear = this.props.json.year;
-        
+
         for (month=1; month<=12; month++){
             var days_in_this_month = date("t", mktime(0, 0, 0, month, 1, syear));
             var current_month_name = months[(month-1)];
@@ -157,6 +172,7 @@ var DrawCalendar = React.createClass({
                     if(week_day == 7){
                         var dtid = user + "_" + (month==13 ? syear + 1 : syear) + "_" + (month==13 ? 1 : month) + "_" + colweeks;
                         var data = this.props.json.rows[user][dtid] ? this.props.json.rows[user][dtid] : null;
+                        
                         var datetooltip = this.props.json.graph_users[user] + ' ' + (((first > day_counter)? months[month-2] : ((first == 0) ? months[11]:months[month-1])) + " " + ((first == 0) ? 32-(7-day_counter):first) + " - " + months[(month-1)] + " " + day_counter);
                         cols.push(<td className={'sc' + ((data!=null)? ' active':'')} data-tooltip={datetooltip} data-text={data} data-id={dtid} data-user={user} onClick={function(e){
                             this.setState({ showEdit: true, text: e.target.getAttribute('data-text'), id: e.target.getAttribute('data-id'), user: e.target.getAttribute('data-user'), index: this.props.json.index })
@@ -257,7 +273,7 @@ var DrawMsgbox = React.createClass({
         });
     },
     handleSave: function(event){
-        csend({ storage:1, id_graph:this.state.id, unit: this.state.user, data: this.state.text, index: this.state.index })
+        csend({ storage:1, id_graph:this.state.id, unit: this.state.user, data: this.state.text, index: this.state.index });
         this.setState({ closed: true });
     },
     handleClose: function(event){
@@ -331,7 +347,6 @@ var DrawListItem = React.createClass({
         this.setState({ 
             confirm: true, 
             func: function(){
-                console.log(this.props.id, this.props.pid)
                 csend({action: 'delete_otdel', otdel_id: this.props.id, pid: this.props.pid });
                 this.setState({
                     confirm: false
@@ -503,7 +518,6 @@ var DrawMembers = React.createClass({
             this.setState({
                 confirm: true, 
                 func: function(){
-                    console.log(member)
                     csend({action:'delete_member', member_id: member.id});
                     this.setState({
                         confirm: false
@@ -594,6 +608,8 @@ var MainApp = React.createClass({
     render: function() {
         if (!this.state.newval) return;
 
+        console.log((new Date).getTime())
+
         return (
             <DrawNavbar json={this.state.newval}>
                 {(this.state.newval.view == 'nav') && (
@@ -607,7 +623,6 @@ var MainApp = React.createClass({
     },
 })
 
-//<code>{JSON.stringify(this.state.newval)}</code>
 
 csend({action:'nav', id: 1});
 React.render( <MainApp />,  document.getElementById('content') );

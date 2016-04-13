@@ -10,7 +10,11 @@ $editname = mysql_real_escape_string($_REQUEST[editname]);
 $accessval = mysql_real_escape_string($_REQUEST[accessval]);
 $checkvalue = mysql_real_escape_string($_REQUEST[checkvalue]);
 $member_id = mysql_real_escape_string($_REQUEST[member_id]);
-$user = "ann"; //$_SERVER["AUTHENTICATE_UID"];
+$user = $_SESSION[user];//"ann"; //$_SERVER["AUTHENTICATE_UID"];
+
+if ($action == 'logout'){
+  unset($_SESSION[user]);
+}
 
 if (mysql_real_escape_string($_REQUEST[id])){
 	$_SESSION[id] = mysql_real_escape_string($_REQUEST[id]);
@@ -53,7 +57,8 @@ $json = "";
 //-------------------------------------------
 
 function canEditThis($d){
-	if ($_SESSION[admin]) return true;
+	global $isAdmin;
+	if ($isAdmin) return true;
 	$res = mysql_query("select * from vacations_editors where otdel='$d'") or die (mysql_error());
 	while($row = mysql_fetch_array($res, MYSQL_ASSOC)){
 		if ($_SESSION[user]==$row[name]){
@@ -138,36 +143,6 @@ function memberslist(){
 
 //------------------------------------------------------------
 
-function dologin(){
-	global $user;
-	unset($_SESSION[editor]);
-	unset($_SESSION[user]);
-	unset($_SESSION[admin]);
-	
-	$_ADMINS = array();
-	$_EDITORS = array();
-	$res = mysql_query("select * from vacations_members where access!=0");
-	while($ret=mysql_fetch_array($res, MYSQL_ASSOC)){ 
-		if ($ret[access]=='1'){
-			$_ADMINS[] = $ret[name];
-		}
-		if ($ret[access]=='2'){
-			$_EDITORS[] = $ret[name]; 
-		}
-	}
-	mysql_free_result($res);
-	$IsAdmin = in_array($user, $_ADMINS);
-	$IsEditor = in_array($user, $_EDITORS);
-
-	if ($IsAdmin or $IsEditor){
-		$_SESSION[user] = $user;
-		$_SESSION[admin] = $IsAdmin;
-		$_SESSION[editor] = $IsEditor;
-	}
-}
-
-//-------------------------------------------
-
 function drawCalendar($year) {
 	global $index, $isChecked, $json, $months;
   	$first = 0;
@@ -217,7 +192,7 @@ if ($canedit){
 	}
 }
 
-if ($_SESSION[admin]){
+if ($isAdmin){
 	if ($movepeople && $member && $otdel && $unit){
 		mysql_query("delete from vacations_pointers where uid='$member'") or die (mysql_error());
 		mysql_query("insert ignore into vacations_pointers (uid, name, otdel) values('$member', '$unit', '$otdel')") or die (mysql_error());
@@ -275,11 +250,9 @@ while($row = mysql_fetch_array($ret, MYSQL_ASSOC)){
 mysql_free_result($ret);
 
 
-if (($user!="" && $user!=$_SESSION[user]) || !$_SESSION[user]) dologin();
-
 switch($action){
 	case "delete_departament":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($_SESSION[id]){
 				$result=mysql_query("select id from vacations_otdels where departament=$_SESSION[id]");
 				$row = mysql_fetch_array($result, MYSQL_ASSOC);
@@ -301,7 +274,7 @@ switch($action){
 		break;
 	
 	case "new_otdel":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($otdel_id){
 				mysql_query("insert ignore into vacations_otdels (name, departament) values('Новый отдел', $otdel_id)") or die (mysql_error());
 			} else {
@@ -311,7 +284,7 @@ switch($action){
 		break;
 
 	case "edit_otdel":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($otdel_id && $editname && $editname != ''){
 				mysql_query("update vacations_otdels set name = '$editname' where id=$otdel_id") or die (mysql_error());
 			}
@@ -319,7 +292,7 @@ switch($action){
 		break;
 
 	case "toggle":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($_SESSION[id]){
 				mysql_query("update vacations_otdels set graph=".($checkvalue=='false' ? 1:0)." where id=$_SESSION[id]") or die (mysql_error());
 			}
@@ -327,7 +300,7 @@ switch($action){
 		break;
 
 	case "delete_otdel":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($otdel_id){
 				mysql_query("delete from vacations_editors where otdel='$otdel_id'") or die (mysql_error());
 				mysql_query("delete from vacations_storage where otdel='$otdel_id'") or die (mysql_error());
@@ -344,7 +317,7 @@ switch($action){
 		break;
 
 	case "delete_member":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($member_id){
 				mysql_query("delete from vacations_editors where vacations_editors.uid=$member_id") or die (mysql_error());
 				mysql_query("delete from vacations_members where id=$member_id and access!='1'") or die (mysql_error());
@@ -353,7 +326,7 @@ switch($action){
 		break;
 
 	case "access_member":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($member_id && $accessval!=""){
 				mysql_query("update vacations_members set access='$accessval' where id=$member_id") or die (mysql_error());
 			}
@@ -361,7 +334,7 @@ switch($action){
 		break;
 
 	case "add_member":
-		if ($_SESSION[admin]){
+		if ($isAdmin){
 			if ($name!=""){
 				mysql_query("insert ignore vacations_members set name='$name'") or die (mysql_error());
 			}
@@ -377,8 +350,7 @@ if ($_SESSION[view] == 'nav'){
 }
 
 $json['user'] = $_SESSION[user];
-$json['admin'] = $_SESSION[admin];
-$json['editor'] = $_SESSION[editor];
+$json['admin'] = $isAdmin;
 $json['id'] = $_SESSION[id];
 $json['pid'] = $_SESSION[pid];
 $json['view'] = $_SESSION[view];
@@ -388,6 +360,7 @@ $json['year'] = $_SESSION[year];
 
 header("Content-type: text/javascript; charset=UTF-8"); 
 echo preg_replace( "/:\"(\d+)\"/", ':$1', json_encode($json));
+
 
 mysql_close($con); 
 ?>
