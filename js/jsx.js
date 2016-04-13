@@ -143,8 +143,8 @@ var DrawCalendar = React.createClass({
         for(user in this.props.json.rows){
             cols = [];
             var username = this.props.json.graph_users[user];
-            cols.push(<th style={{ whiteSpace: 'nowrap', lineHeight:'18px', verticalAlign: 'middle', padding: 0, margin: 0}}>
-                <span data-username={username} data-user={user} style={{float:'right', marginRight: '4px'}} className="remove" onClick={ 
+            cols.push(<th className="b-vacations__user">
+                <span data-username={username} data-user={user} className="b-vacations__user-remove" onClick={ 
                     function(e){
                         var user = e.target.getAttribute('data-user');
                         var username = e.target.getAttribute('data-username');
@@ -158,7 +158,7 @@ var DrawCalendar = React.createClass({
                         })                        
                     }.bind(this)
                 }></span>
-                <span style={{padding:'0 5px', marginRight: '60px', overflow: 'hidden', textOverflow: 'ellipsis', width: '150px', height: '34px', padding: '6px 12px', display: 'block' }}>{username}</span>
+                <span className="b-vacations__user-text">{username}</span>
             </th>);
             
             
@@ -173,7 +173,7 @@ var DrawCalendar = React.createClass({
                         var dtid = user + "_" + (month==13 ? syear + 1 : syear) + "_" + (month==13 ? 1 : month) + "_" + colweeks;
                         var data = this.props.json.rows[user][dtid] ? this.props.json.rows[user][dtid] : null;
                         
-                        var datetooltip = this.props.json.graph_users[user] + ' ' + (((first > day_counter)? months[month-2] : ((first == 0) ? months[11]:months[month-1])) + " " + ((first == 0) ? 32-(7-day_counter):first) + " - " + months[(month-1)] + " " + day_counter);
+                        var datetooltip = this.props.json.graph_users[user] + ' ' + (((first > day_counter)? months[month-2] : ((first == 0) ? months[11]:months[month-1])) + " " + ((first == 0) ? 32-(7-day_counter):first) + " - " + (months[(month-1)] || '') + " " + day_counter);
                         cols.push(<td className={'sc' + ((data!=null)? ' active':'')} data-tooltip={datetooltip} data-text={data} data-id={dtid} data-user={user} onClick={function(e){
                             this.setState({ showEdit: true, text: e.target.getAttribute('data-text'), id: e.target.getAttribute('data-id'), user: e.target.getAttribute('data-user'), index: this.props.json.index })
                         }.bind(this)}></td>);
@@ -362,6 +362,9 @@ var DrawListItem = React.createClass({
                     <div>
                         <span className="remove" onClick={this.handleDelete}></span>
                         <span className="edit" onClick={this.handleSave}></span>
+                        {(this.props.name == 'Новый отдел') && (
+                            <span className="b-vacations__item-warning b-vacations__tooltip" data-tooltip="Измените название отдела!"></span>
+                        )}
                     </div>
                 )}
                 <div style={{marginRight:'80px'}}>
@@ -373,7 +376,8 @@ var DrawListItem = React.createClass({
                             this.handleSave();
                         }                
                     }.bind(this)} />
-                    <div className="form-control" style={{border:'none', background: 'none', boxShadow: 'none', display:((this.state.edit)?'none':'block'), transition:'all .2s linear'}} onClick={ function(){ csend({ action:'nav', id:this.props.id, pid:this.props.id }) }.bind(this) }>
+                    <div className="form-control" style={{border:'none', background: 'none', boxShadow: 'none', display:((this.state.edit)?'none':'block'), transition:'all .2s linear'}} 
+                    onClick={ function(){ csend({ action:'nav', id:this.props.id, pid:this.props.id }) }.bind(this) }>
                         {(this.props.graph) && ( <img src="img/graph_icon.gif" style={{marginRight: '10px'}} /> )}
                         {this.props.name}
                     </div>
@@ -435,7 +439,7 @@ var DrawWiev = React.createClass({
                                             <button className='btn btn-primary' onClick={ function(){ csend({year:(new Date().getFullYear() - this.props.json.year), index:this.props.json.index }) }.bind(this) }>текущий год</button>
                                             <button className='btn btn-primary' onClick={ function(){ csend({year:1,index:this.props.json.index }) }.bind(this) }>&rarr;</button>
                                         </div>
-                                        <div style={{fontSize:'32px'}}>{this.props.json.year} г.</div>
+                                        <h3 style={{ marginTop : '0px' }}>{this.props.json.year} г.</h3>
                                     </div>
                                     <DrawCalendar json={this.props.json} />
                                 </div>

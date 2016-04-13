@@ -140,7 +140,6 @@ table.zebra tr:nth-child(odd) { background-color:#efefef; }
 	margin-top: -30px;
 	opacity: 0;
 	visibility: hidden;
-	transition: all .2s linear;
 }
 
 .sc:before:hover {
@@ -149,6 +148,74 @@ table.zebra tr:nth-child(odd) { background-color:#efefef; }
 }
 
 .sc:hover::before {
+	opacity: 1;
+	visibility: visible;
+}
+
+.b-vacations__user {
+	white-space: nowrap !important;
+	line-height: 18px  !important;
+	vertical-align: middle  !important;
+	padding: 0  !important;
+	margin: 0  !important;	
+}
+
+.b-vacations__user-text {
+	padding: 5px 12px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 150px;
+	display: block;
+}
+
+.b-vacations__user-remove {
+	margin: 9px;
+    background: url(../img/close.png) no-repeat center;
+    opacity: 0.2;
+    filter: alpha(opacity=20);
+    height: 10px;
+    width: 10px;
+    line-height: inherit;
+    display: inline-block;
+    cursor: pointer;
+    float: right !important;
+    transition: opacity .2s linear;	
+}
+
+.bheader {
+	padding: 0px !important;
+}
+
+.b-vacations__item-warning {
+    background: url(../img/warning.png) no-repeat center;
+    height: 34px;
+    width: 25px;
+    line-height: inherit;
+    display: inline-block;
+    cursor: pointer;
+    float: right !important;
+}
+
+.b-vacations__tooltip:before {
+	position: absolute;
+	background: rgba(0, 0, 0, .5);
+	border-radius: 8px;
+	box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8);
+	color: #fff;
+	content: attr(data-tooltip);
+	padding: 5px 10px;
+	margin-top: -30px;
+	opacity: 0;
+	visibility: hidden;
+	z-index: 999;
+}
+
+.b-vacations__tooltip:before:hover {
+	opacity: 0;
+	visibility: hidden;
+}
+
+.b-vacations__tooltip:hover::before {
 	opacity: 1;
 	visibility: visible;
 }

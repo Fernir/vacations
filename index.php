@@ -10,7 +10,7 @@ require_once("config.php");
 <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=0.5, minimum-scale=0.5, maximum-scale=0.5" />
 
 <!-- Custom Fonts -->
-<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,700&amp;subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700&amp;subset=latin,cyrillic-ext' rel='stylesheet' type='text/css'>
 <!-- Custom Styles -->
 <link rel="stylesheet" href="style/style.css" type="text/css" />
 
